@@ -54,16 +54,16 @@ private void executeScreenRecord(String fileName) {
 private void getFile(String fileName) {
     def process = new ProcessBuilder().inheritIO().command(adbExec, "pull", "/sdcard/$fileName")
                                     .redirectErrorStream(true).start();
-    process.waitFor();    
+    process.waitFor();
 }
 
 private void checkForSdkLevel() {
     //screenrecord is only available on API level 19 and higher
-    def apilevelCmd = "$adbExec -d shell getprop ro.build.version.sdk"
+    def apilevelCmd = "$adbExec shell getprop ro.build.version.sdk"
     proc = apilevelCmd.execute()
     proc.waitFor()
     def apilevel
-    proc.in.text.eachLine { apilevel = it.toInteger() }    
+    proc.in.text.eachLine { apilevel = it.toInteger() }
     if(apilevel < 19) {
         println("Screenrecord is not available below API Level 19")
         System.exit(-1)
